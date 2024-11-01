@@ -1,0 +1,83 @@
+<html>
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Add atividade</h1>
+        <form method="POST" action="/">
+            <input type="text" name="title" placeholder="Title" required>
+            <input type="text" name="descricao" placeholder="Description" required>
+            <input type="date" name="data_inicio" required>
+            <input type="date" name="data_fim" required>
+            <input type="submit" value="Add">
+        </form>
+        <h1>Atividades</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr data-toggle="modal" data-target="#modal{{ loop.index }}">
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.descricao }}</td>
+                    <td>{{ book.data_inicio }}</td>
+                    <td>{{ book.data_fim }}</td>
+                    <td>
+                        <form method="POST" action="./delete" style="display: inline">
+                            <input type="hidden" value="{{ book.title }}" name="title">
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                        </form>
+                    </td>
+                </tr>
+                <!-- Modal -->
+                <div class="modal fade" id="modal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ loop.index }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalLabel{{ loop.index }}">{{ book.title }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="./update">
+                                    <input type="hidden" value="{{ book.title }}" name="oldtitle">
+                                    <div class="form-group">
+                                        <label for="newtitle">New Title</label>
+                                        <input type="text" class="form-control" id="newtitle" name="newtitle" value="{{ book.title }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newdescricao">New Description</label>
+                                        <input type="text" class="form-control" id="newdescricao" name="newdescricao" value="{{ book.descricao }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newdata_inicio">New Start Date</label>
+                                        <input type="date" class="form-control" id="newdata_inicio" name="newdata_inicio" value="{{ book.data_inicio }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newdata _fim">New End Date</label>
+                                        <input type="date" class="form-control" id="newdata_fim" name="newdata_fim" value="{{ book.data_fim }}" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
